@@ -1,5 +1,5 @@
 ﻿/* TODO
-* 1. line 43. Error on reading float numbers like 123.456.789 and 123.2343wewe
+* 1. line 263. 
 */
 
 #include <iostream>
@@ -17,8 +17,8 @@ struct Pipe
 struct CompressorStation
 {
 	std::string name;
-	unsigned short int workshopNum;
-	unsigned short int activeWorkshopNum;
+	short int workshopNum;
+	short int activeWorkshopNum;
 	float effectiveness;
 };
 
@@ -240,7 +240,7 @@ void savePipe(Pipe& pipe, bool pipeExist) {
 
 	if (out.is_open()) {
 		if (pipeExist) 
-			out << pipe.name << ";" << pipe.length << ";" << pipe.diameter << ";" << pipe.isRepairing << "\n";
+			out << "1" << ";" << pipe.name << ";" << pipe.length << ";" << pipe.diameter << ";" << pipe.isRepairing << "\n";
 		else
 			out << "\n";
 	}
@@ -253,11 +253,73 @@ void saveCs(CompressorStation& cs, bool csExist) {
 
 	if (out.is_open()) {
 		if (csExist)
-			out << cs.name << ";" << cs.workshopNum << ";" << cs.activeWorkshopNum << ";" << cs.effectiveness << "\n";
+			out << "1" << ";" << cs.name << ";" << cs.workshopNum << ";" << cs.activeWorkshopNum << ";" << cs.effectiveness << "\n";
 		else
 			out << "\n";
 	}
 	out.close();
+}
+
+void loadPipe(Pipe& pipe, bool& pipeExistLink) {
+	std::ifstream in;
+	in.open("data.txt");
+
+	if (in.is_open()) {
+		std::string word;
+		getline(in, word);
+		if (word != "") {
+			in.close();
+			in.open("data.txt");
+			getline(in, word, ';');
+			int pipeCount = std::stoi(word.c_str());
+			getline(in, word, ';');
+			pipe.name = word;
+			getline(in, word, ';');
+			pipe.length = std::stof(word.c_str(), NULL);
+			getline(in, word, ';');
+			pipe.diameter = std::stof(word.c_str(), NULL);
+			getline(in, word, '\n');
+			pipe.isRepairing = std::stoi(word.c_str());
+			pipeExistLink = true;
+		}
+		else {
+			pipe = {};
+			pipeExistLink = false;
+		}
+	}
+	in.close();
+}
+
+void loadCs(CompressorStation& cs, bool& csExistLink) {
+	std::ifstream in;
+	in.open("data.txt");
+
+	if (in.is_open()) {
+		std::string word;
+		getline(in, word);
+		getline(in, word);
+		if (word != "") {
+			in.close();
+			in.open("data.txt");
+			getline(in, word);
+			getline(in, word, ';');
+			int csCount = std::stoi(word.c_str());
+			getline(in, word, ';');
+			cs.name = word;
+			getline(in, word, ';');
+			cs.workshopNum = std::stoi(word.c_str());
+			getline(in, word, ';');
+			cs.activeWorkshopNum = std::stof(word.c_str());
+			getline(in, word, '\n');
+			cs.effectiveness = std::stof(word.c_str());
+			csExistLink = true;
+		}
+		else {
+			cs = {};
+			csExistLink = false;
+		}
+	}
+	in.close();
 }
 
 int main()
@@ -266,9 +328,11 @@ int main()
 	Pipe firstPipe;
 	Pipe &pipe = firstPipe;
 	bool pipeExist = false;
+	bool& pipeExistLink = pipeExist;
 	CompressorStation firstCs;
 	CompressorStation& cs = firstCs;
 	bool csExist = false;
+	bool& csExistLink = csExist;
 
 	while (programFlag) // Infinity cycle causes a menu
 	{
@@ -362,7 +426,18 @@ int main()
 				break;
 			case 7:
 				system("cls");
-				std::cout << "Coming soon\n\n";
+				loadPipe(pipe, pipeExistLink);
+				if (pipeExist)
+					std::cout << "The pipe was successfully loaded!\n\n";
+				else
+					std::cout << "Pipe does not exist\n\n";
+
+				loadCs(cs, csExistLink);
+				if (csExist) {
+					std::cout << "The compressor station was successfully loaded!\n\n";
+				}
+				else
+					std::cout << "The compressor station does not exist\n\n";
 				break;
 			}
 		}
