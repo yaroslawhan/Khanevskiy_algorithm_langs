@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 struct Pipe
 {
@@ -37,7 +38,7 @@ void showMenu() {
 
 void addPipe(Pipe &pipe) {
 	std::cout << "Enter name(mileage) of the pipe: ";
-	std::cin >> pipe.name;
+	getline(std::cin >> std::ws, pipe.name);
 
 	while (true) {
 		std::cout << "\nEnter pipe length (in meters): ";
@@ -103,7 +104,7 @@ void addPipe(Pipe &pipe) {
 
 void addCs(CompressorStation& cs) {
 	std::cout << "Enter name of the compressor station: ";
-	std::cin >> cs.name;
+	getline(std::cin >> std::ws, cs.name);
 
 	while (true) {
 		std::cout << "\nEnter the number of workshops: ";
@@ -187,18 +188,74 @@ void showCss(CompressorStation& cs) {
 	std::cout << "\nThe compressor station effectiveness: " << cs.effectiveness << "\n\n\n";
 }
 
-void save(Pipe& pipe, bool pipeExist, CompressorStation& cs, bool csExist) {
+void editPipe(Pipe& pipe) {
+	while (true) {
+		std::cout << "Enter new pipe status (0 - in repairing, 1 - not in repairing): ";
+		std::cin >> pipe.isRepairing;
+
+		if (std::cin.fail()) {
+			system("cls");
+			std::cin.clear();
+			std::cin.ignore(1000, '\n');
+			std::cout << "ERROR\n";
+		}
+		else {
+			break;
+		}
+	}
+}
+
+void editCs(CompressorStation& cs) {
+	while (true) {
+		std::cout << "\nEnter new value of active workshops: ";
+		std::cin >> cs.activeWorkshopNum;
+
+		if (std::cin.fail()) {
+			system("cls");
+			std::cin.clear();
+			std::cin.ignore(1000, '\n');
+			std::cout << "ERROR\n";
+		}
+		else if (cs.activeWorkshopNum < 0) {
+			system("cls");
+			std::cout << "ERROR. The number of active workshops can`t be less than 0\n";
+		}
+		else if (cs.activeWorkshopNum > 100) {
+			system("cls");
+			std::cout << "ERROR. The number of active workshops can`t be more than 100\n";
+		}
+		else if (cs.activeWorkshopNum > cs.workshopNum) {
+			system("cls");
+			std::cout << "ERROR. The number of active workshops can`t be more than the number of workshops\n";
+		}
+		else {
+			break;
+		}
+	}
+}
+
+void savePipe(Pipe& pipe, bool pipeExist) {
 	std::ofstream out;
 	out.open("data.txt");
 
 	if (out.is_open()) {
-		if (pipeExist) {
-			
-		}
-		
-		if (csExist) {
+		if (pipeExist) 
+			out << pipe.name << ";" << pipe.length << ";" << pipe.diameter << ";" << pipe.isRepairing << "\n";
+		else
+			out << "\n";
+	}
+	out.close();
+}
 
-		}
+void saveCs(CompressorStation& cs, bool csExist) {
+	std::ofstream out;
+	out.open("data.txt", std::ios::app);
+
+	if (out.is_open()) {
+		if (csExist)
+			out << cs.name << ";" << cs.workshopNum << ";" << cs.activeWorkshopNum << ";" << cs.effectiveness << "\n";
+		else
+			out << "\n";
 	}
 	out.close();
 }
@@ -268,7 +325,7 @@ int main()
 			case 4:
 				system("cls");
 				if (pipeExist) {
-					addPipe(pipe);
+					editPipe(pipe);
 					system("cls");
 					std::cout << "The pipe was successfully edited!\n\n";
 				}
@@ -279,7 +336,7 @@ int main()
 			case 5:
 				system("cls");
 				if (csExist) {
-					addCs(cs);
+					editCs(cs);
 					system("cls");
 					std::cout << "The compressor station was successfully edited!\n\n";
 				}
@@ -289,8 +346,19 @@ int main()
 				break;
 			case 6:
 				system("cls");
-				save(pipe, pipeExist, cs, csExist);
-				std::cout << "Information was saved!\n\n";
+				savePipe(pipe, pipeExist);
+				if (pipeExist)
+					std::cout << "The pipe was successfully saved!\n\n";
+				else
+					std::cout << "Pipe does not exist\n\n";
+
+				saveCs(cs, csExist);
+				if (csExist) {
+					std::cout << "The compressor station was successfully saved!\n\n";
+				}
+				else
+					std::cout << "The compressor station does not exist\n\n";
+
 				break;
 			case 7:
 				system("cls");
@@ -304,38 +372,6 @@ int main()
 			system("cls");
 			std::cout << "ERROR\n\n";
 		}
-
-
-		/*
-		if (action == "0") {
-			programFlag = false;
-		}
-		else if (action == "1") {
-			system("cls");
-			firstPipe = addPipe();
-			system("cls");
-			std::cout << "New pipe added successfully!\n\n";
-		}
-		else if (action == "3") {
-			system("cls");
-			showPipe(firstPipe);
-		}
-		else {
-			system("cls");
-			std::cout << "ERROR\n\n";
-		}
-		*/
 	}
 	return 0;
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
