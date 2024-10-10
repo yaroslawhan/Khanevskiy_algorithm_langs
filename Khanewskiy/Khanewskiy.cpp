@@ -41,17 +41,14 @@ void addPipe(Pipe &pipe) {
 		std::cin >> pipe.length;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
 		}
 		else if (pipe.length <= 0) {
-			system("cls");
 			std::cout << "ERROR. Pipe length can`t be less than 0 meters or be equal 0 meters\n";
 		}
 		else if (pipe.length > 50) {
-			system("cls");
 			std::cout << "ERROR. Pipe length can`t be more than 50 meters\n";
 		}
 		else {
@@ -64,17 +61,14 @@ void addPipe(Pipe &pipe) {
 		std::cin >> pipe.diameter;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
 		}
 		else if (pipe.diameter <= 0) {
-			system("cls");
 			std::cout << "ERROR. Pipe diameter can`t be less than 0 millimeters or be equal 0 millimeters\n";
 		}
 		else if (pipe.diameter > 5000) {
-			system("cls");
 			std::cout << "ERROR. Pipe diameter can`t be more than 5000 millimeters\n";
 		}
 		else {
@@ -87,7 +81,6 @@ void addPipe(Pipe &pipe) {
 		std::cin >> pipe.isRepairing;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
@@ -107,17 +100,14 @@ void addCs(CompressorStation& cs) {
 		std::cin >> cs.workshopNum;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
 		}
 		else if (cs.workshopNum <= 0) {
-			system("cls");
 			std::cout << "ERROR. The number of workshops can`t be less than 0 or be equal 0\n";
 		}
 		else if (cs.workshopNum > 100) {
-			system("cls");
 			std::cout << "ERROR. The number of workshops can`t be more than 100\n";
 		}
 		else {
@@ -130,21 +120,17 @@ void addCs(CompressorStation& cs) {
 		std::cin >> cs.activeWorkshopNum;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
 		}
 		else if (cs.activeWorkshopNum < 0) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be less than 0\n";
 		}
 		else if (cs.activeWorkshopNum > 100) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be more than 100\n";
 		}
 		else if (cs.activeWorkshopNum > cs.workshopNum) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be more than the number of workshops\n";
 		}
 		else {
@@ -157,7 +143,6 @@ void addCs(CompressorStation& cs) {
 		std::cin >> cs.effectiveness;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
@@ -208,7 +193,6 @@ void editPipe(Pipe& pipe) {
 		std::cin >> pipe.isRepairing;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
@@ -225,21 +209,17 @@ void editCs(CompressorStation& cs) {
 		std::cin >> cs.activeWorkshopNum;
 
 		if (std::cin.fail()) {
-			system("cls");
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "ERROR\n";
 		}
 		else if (cs.activeWorkshopNum < 0) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be less than 0\n";
 		}
 		else if (cs.activeWorkshopNum > 100) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be more than 100\n";
 		}
 		else if (cs.activeWorkshopNum > cs.workshopNum) {
-			system("cls");
 			std::cout << "ERROR. The number of active workshops can`t be more than the number of workshops\n";
 		}
 		else {
@@ -254,9 +234,9 @@ void savePipe(Pipe& pipe, bool pipeExist) {
 
 	if (out.is_open()) {
 		if (pipeExist) 
-			out << "1" << "\n" << pipe.name << "\n" << pipe.length << "\n" << pipe.diameter << "\n" << pipe.isRepairing << "\n-\n";
+			out << "1" << "\n" << pipe.name << "\n" << pipe.length << "\n" << pipe.diameter << "\n" << pipe.isRepairing << "\n";
 		else
-			out << "0\n-\n";
+			out << "0\n";
 	}
 	out.close();
 }
@@ -272,14 +252,12 @@ void saveCs(CompressorStation& cs, bool csExist) {
 	out.close();
 }
 
-void loadPipe(Pipe& pipe, bool& pipeExistLink) {
-	std::ifstream in;
-	in.open("data.txt");//!!!!!!!!!!!!!!
+bool loadPipe(Pipe& pipe, std::ifstream& in) {//!!! bool
+	//!!!!!!!!!!!!!! open
 	int pipeCount;
-	in >> pipeCount;
 
 	if (in.is_open()) {
-
+		in >> pipeCount;
 		for (int i = 0; i < pipeCount; i++) {
 			getline(in >> std::ws, pipe.name);
 			in >> pipe.length;
@@ -287,7 +265,9 @@ void loadPipe(Pipe& pipe, bool& pipeExistLink) {
 			in >> pipe.isRepairing;
 		}
 		if (pipeCount)
-			pipeExistLink = true;
+			return true;
+	}
+	return false;
 	//	std::string word;
 	//	getline(in, word);
 	//	if (word != "") {
@@ -309,17 +289,12 @@ void loadPipe(Pipe& pipe, bool& pipeExistLink) {
 	//		pipe = {};
 	//		pipeExistLink = false;
 	//	}
-	}
-	in.close();
 }
 
-void loadCs(CompressorStation& cs, bool& csExistLink) {//!!!!!!!!!!!!!!!!!
-	std::ifstream in;
-	in.open("data.txt");
+bool loadCs(CompressorStation& cs, std::ifstream& in) {//!!!!!!!!!!!!!!!!!
 	int csCount;
 
 	if (in.is_open()) {
-		in.ignore(std::numeric_limits<std::streamsize>::max(), '-');
 		in >> csCount;
 		for (int i = 0; i < csCount; i++) {
 			getline(in >> std::ws, cs.name);
@@ -328,8 +303,9 @@ void loadCs(CompressorStation& cs, bool& csExistLink) {//!!!!!!!!!!!!!!!!!
 			in >> cs.effectiveness;
 		}
 		if (csCount)
-			csExistLink = true;
-
+			return true;
+	}
+	return false;
 		/*std::string word;
 		getline(in, word);
 		getline(in, word);
@@ -353,9 +329,24 @@ void loadCs(CompressorStation& cs, bool& csExistLink) {//!!!!!!!!!!!!!!!!!
 			cs = {};
 			csExistLink = false;
 		}*/
-	}
-	in.close();
 }
+
+//void loadAll(Pipe& firstPipe, CompressorStation& firstCs, bool& pipeExist, bool& csExist) {
+//	std::ifstream file;
+//	file.open("data.txt");
+//	pipeExist = loadPipe(firstPipe, file);
+//	if (pipeExist)
+//		std::cout << "The pipe was successfully loaded!\n\n";
+//	else
+//		std::cout << "Pipe does not exist\n\n";
+//
+//	csExist = loadCs(firstCs, file);
+//	if (csExist) {
+//		std::cout << "The compressor station was successfully loaded!\n\n";
+//	}
+//	else
+//		std::cout << "The compressor station does not exist\n\n";
+//}
 
 int main()
 {
@@ -376,32 +367,27 @@ int main()
 				return 0;
 
 			case 1:
-				system("cls");
 				if (pipeExist) {
 					std::cout << "Pipe is already exist\n\n";
 				}
 				else {
 					addPipe(firstPipe);
-					system("cls");
 					std::cout << "New pipe added successfully!\n\n";
 					pipeExist = true;
 				}
 				break;
 
 			case 2:
-				system("cls");
 				if (csExist) {
 					std::cout << "Compressor station is already exist\n\n";
 				}
 				else {
 					addCs(firstCs);
-					system("cls");
 					std::cout << "New compressor station added successfully!\n\n";
 					csExist = true;
 				}
 				break;
 			case 3:
-				system("cls");
 				if (pipeExist) {
 					//showPipes(firstPipe);
 					std::cout << firstPipe;
@@ -418,10 +404,8 @@ int main()
 				}
 				break;
 			case 4:
-				system("cls");
 				if (pipeExist) {
 					editPipe(firstPipe);
-					system("cls");
 					std::cout << "The pipe was successfully edited!\n\n";
 				}
 				else {
@@ -429,10 +413,8 @@ int main()
 				}
 				break;
 			case 5:
-				system("cls");
 				if (csExist) {
 					editCs(firstCs);
-					system("cls");
 					std::cout << "The compressor station was successfully edited!\n\n";
 				}
 				else {
@@ -440,7 +422,6 @@ int main()
 				}
 				break;
 			case 6:
-				system("cls");
 				savePipe(firstPipe, pipeExist);
 				if (pipeExist)
 					std::cout << "The pipe was successfully saved!\n\n";
@@ -456,14 +437,28 @@ int main()
 
 				break;
 			case 7:
-				system("cls");
-				loadPipe(firstPipe, pipeExist);
+				/*loadPipe(firstPipe, pipeExist);
 				if (pipeExist)
 					std::cout << "The pipe was successfully loaded!\n\n";
 				else
 					std::cout << "Pipe does not exist\n\n";
 
 				loadCs(firstCs, csExist);
+				if (csExist) {
+					std::cout << "The compressor station was successfully loaded!\n\n";
+				}
+				else
+					std::cout << "The compressor station does not exist\n\n";*/
+				//loadAll(firstPipe, firstCs, pipeExist, csExist);
+				std::ifstream file;
+				file.open("data.txt");
+				pipeExist = loadPipe(firstPipe, file);
+				if (pipeExist)
+					std::cout << "The pipe was successfully loaded!\n\n";
+				else
+					std::cout << "Pipe does not exist\n\n";
+
+				csExist = loadCs(firstCs, file);
 				if (csExist) {
 					std::cout << "The compressor station was successfully loaded!\n\n";
 				}
@@ -475,7 +470,6 @@ int main()
 		else {
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
-			system("cls");
 			std::cout << "ERROR\n\n";
 		}
 	}
