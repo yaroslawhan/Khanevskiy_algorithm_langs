@@ -1,3 +1,10 @@
+#pragma once
+
+#ifndef STRING_H
+#define STRING_H
+#include <string>
+#endif
+
 #ifndef PIPE_H
 #define PIPE_H
 
@@ -8,13 +15,13 @@ private:
 	float length;
 	int diameter;
 	bool isRepairing = false;
-	bool pipeExist = false;
 public:
+	Pipe();
 	void addPipe();
 	void editPipe();
-	bool savePipe(std::ofstream& out);
+	bool savePipe(std::ofstream& out, bool pipeExist);
 	bool loadPipe(std::ifstream& in);
-	std::ostream& operator << (std::ostream& out);
+	void showPipes();
 };
 
 #endif  PIPE_H
@@ -30,13 +37,12 @@ private:
 	short int workshopNum;
 	short int activeWorkshopNum;
 	float effectiveness;
-	bool csExist = false;
 public:
 	void addCs();
 	void editCs();
-	bool saveCs(std::ofstream& out);
+	bool saveCs(std::ofstream& out, bool csExist);
 	bool loadCs(std::ifstream& in);
-	std::ostream& operator << (std::ostream& out);
+	void showCss();
 };
 
 #endif  CS_H

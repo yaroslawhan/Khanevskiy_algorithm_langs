@@ -1,22 +1,24 @@
-﻿#include <iostream>
-#include <fstream>
+﻿#include "headers/classes.h"
+
+#ifndef IOSTREAM_H
+#define IOSTREAM_H
+#include <iostream>
+#endif
+
+#ifndef STRING_H
+#define STRING_H
 #include <string>
+#endif
 
-struct Pipe
-{
-	std::string name;
-	float length;
-	int diameter;
-	bool isRepairing = false;
-};
+#ifndef FSTREAM_H
+#define FSTREAM_H
+#include <fstream>
+#endif
 
-struct CompressorStation
-{
-	std::string name;
-	short int workshopNum;
-	short int activeWorkshopNum;
-	float effectiveness;
-};
+#ifndef CHECKCINERROR_H
+#define CHECKCINERROR_H
+#include "headers/checkCinError.h"
+#endif
 
 void showMenu() {
 	std::cout << "Gas pipeline transport model \n\n";
@@ -32,249 +34,21 @@ void showMenu() {
 	std::cout << "Please select an action :";
 }
 
-void checkCinError() {
+bool checkCinError() {
 	if (std::cin.fail()) {
 		std::cin.clear();
 		std::cin.ignore(1000, '\n');
 		std::cout << "ERROR\n";
+		return false;
 	}
-}
-
-void addPipe(Pipe &pipe) {
-	std::cout << "Enter name(mileage) of the pipe: ";
-	getline(std::cin >> std::ws, pipe.name);
-
-	while (true) {
-		std::cout << "\nEnter pipe length (in meters): ";
-		std::cin >> pipe.length;
-
-		checkCinError();
-		if (pipe.length <= 0) {
-			std::cout << "ERROR. Pipe length can`t be less than 0 meters or be equal 0 meters\n";
-		}
-		else if (pipe.length > 50) {
-			std::cout << "ERROR. Pipe length can`t be more than 50 meters\n";
-		}
-		else {
-			break;
-		}
-	}
-
-	while (true) {
-		std::cout << "\nEnter pipe diameter (in millimeters): ";
-		std::cin >> pipe.diameter;
-
-		checkCinError();
-		if (pipe.diameter <= 0) {
-			std::cout << "ERROR. Pipe diameter can`t be less than 0 millimeters or be equal 0 millimeters\n";
-		}
-		else if (pipe.diameter > 5000) {
-			std::cout << "ERROR. Pipe diameter can`t be more than 5000 millimeters\n";
-		}
-		else {
-			break;
-		}
-	}
-
-	while (true) {
-		std::cout << "\nChoose pipe status (0 - in repairing, 1 - not in repairing): ";
-		std::cin >> pipe.isRepairing;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-void addCs(CompressorStation& cs) {
-	std::cout << "Enter name of the compressor station: ";
-	getline(std::cin >> std::ws, cs.name);
-
-	while (true) {
-		std::cout << "\nEnter the number of workshops: ";
-		std::cin >> cs.workshopNum;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else if (cs.workshopNum <= 0) {
-			std::cout << "ERROR. The number of workshops can`t be less than 0 or be equal 0\n";
-		}
-		else if (cs.workshopNum > 100) {
-			std::cout << "ERROR. The number of workshops can`t be more than 100\n";
-		}
-		else {
-			break;
-		}
-	}
-
-	while (true) {
-		std::cout << "\nEnter the number of active workshops: ";
-		std::cin >> cs.activeWorkshopNum;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else if (cs.activeWorkshopNum < 0) {
-			std::cout << "ERROR. The number of active workshops can`t be less than 0\n";
-		}
-		else if (cs.activeWorkshopNum > 100) {
-			std::cout << "ERROR. The number of active workshops can`t be more than 100\n";
-		}
-		else if (cs.activeWorkshopNum > cs.workshopNum) {
-			std::cout << "ERROR. The number of active workshops can`t be more than the number of workshops\n";
-		}
-		else {
-			break;
-		}
-	}
-
-	while (true) {
-		std::cout << "\nEnter the compressor station effectiveness: ";
-		std::cin >> cs.effectiveness;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-std::ostream& operator << (std::ostream& out, const Pipe& pipe) {
-	out << "Information about pipes:\n\n"
-	<< "Pipe name: " << pipe.name
-	<< "\nPipe length: " << pipe.length
-	<< "\nPipe diameter: " << pipe.diameter
-	<< "\nPipe status: " << ((pipe.isRepairing) ? "not " : "") << "in repairing\n\n\n";
-	return out;
-}
-
-std::ostream& operator << (std::ostream& out, const CompressorStation& cs) {
-	out << "Information about compressor stations:\n\n"
-	<< "Compressor station name: " << cs.name
-	<< "\nThe number of workshops: " << cs.workshopNum
-	<< "\nThe number of active workshops: " << cs.activeWorkshopNum
-	<< "\nThe compressor station effectiveness: " << cs.effectiveness << "\n\n\n";
-	return out;
-}
-
-void editPipe(Pipe& pipe) {
-	while (true) {
-		std::cout << "Enter new pipe status (0 - in repairing, 1 - not in repairing): ";
-		std::cin >> pipe.isRepairing;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-void editCs(CompressorStation& cs) {
-	while (true) {
-		std::cout << "\nEnter new value of active workshops: ";
-		std::cin >> cs.activeWorkshopNum;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "ERROR\n";
-		}
-		else if (cs.activeWorkshopNum < 0) {
-			std::cout << "ERROR. The number of active workshops can`t be less than 0\n";
-		}
-		else if (cs.activeWorkshopNum > 100) {
-			std::cout << "ERROR. The number of active workshops can`t be more than 100\n";
-		}
-		else if (cs.activeWorkshopNum > cs.workshopNum) {
-			std::cout << "ERROR. The number of active workshops can`t be more than the number of workshops\n";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-void savePipe(Pipe& pipe, bool pipeExist) {
-	std::ofstream out;
-	out.open("data.txt");
-
-	if (out.is_open()) {
-		if (pipeExist) 
-			out << "1" << "\n" << pipe.name << "\n" << pipe.length << "\n" << pipe.diameter << "\n" << pipe.isRepairing << "\n";
-		else
-			out << "0\n";
-	}
-	out.close();
-}
-
-void saveCs(CompressorStation& cs, bool csExist) {
-	std::ofstream out;
-	out.open("data.txt", std::ios::app);
-
-	if (out.is_open() && csExist)
-		out << "1" << "\n" << cs.name << "\n" << cs.workshopNum << "\n" << cs.activeWorkshopNum << "\n" << cs.effectiveness << "\n";
-	else
-		out << "0";
-	out.close();
-}
-
-bool loadPipe(Pipe& pipe, std::ifstream& in) {
-	int pipeCount;
-
-	if (in.is_open()) {
-		in >> pipeCount;
-		for (int i = 0; i < pipeCount; i++) {
-			getline(in >> std::ws, pipe.name);
-			in >> pipe.length;
-			in >> pipe.diameter;
-			in >> pipe.isRepairing;
-		}
-		if (pipeCount)
-			return true;
-	}
-	return false;
-}
-
-bool loadCs(CompressorStation& cs, std::ifstream& in) {
-	int csCount;
-
-	if (in.is_open()) {
-		in >> csCount;
-		for (int i = 0; i < csCount; i++) {
-			getline(in >> std::ws, cs.name);
-			in >> cs.workshopNum;
-			in >> cs.activeWorkshopNum;
-			in >> cs.effectiveness;
-		}
-		if (csCount)
-			return true;
-	}
-	return false;
+	return true;
 }
 
 int main()
 {
-	Pipe firstPipe;
+	Pipe pipe;
 	bool pipeExist = false;
-	CompressorStation firstCs;
+	CompressorStation cs;
 	bool csExist = false;
 
 	while (1) // Infinity cycle causes a menu
@@ -293,7 +67,7 @@ int main()
 					std::cout << "Pipe is already exist\n\n";
 				}
 				else {
-					addPipe(firstPipe);
+					pipe.addPipe();
 					std::cout << "New pipe added successfully!\n\n";
 					pipeExist = true;
 				}
@@ -304,20 +78,20 @@ int main()
 					std::cout << "Compressor station is already exist\n\n";
 				}
 				else {
-					addCs(firstCs);
+					cs.addCs();
 					std::cout << "New compressor station added successfully!\n\n";
 					csExist = true;
 				}
 				break;
 			case 3:
 				if (pipeExist) {
-					std::cout << firstPipe;
+					pipe.showPipes();
 				}
 				else {
 					std::cout << "Pipe does not exist\n\n";
 				}
 				if (csExist) {
-					std::cout << firstCs;
+					cs.showCss();
 				}
 				else {
 					std::cout << "Compressor station does not exist\n\n";
@@ -325,7 +99,7 @@ int main()
 				break;
 			case 4:
 				if (pipeExist) {
-					editPipe(firstPipe);
+					pipe.editPipe();
 					std::cout << "The pipe was successfully edited!\n\n";
 				}
 				else {
@@ -334,44 +108,49 @@ int main()
 				break;
 			case 5:
 				if (csExist) {
-					editCs(firstCs);
+					cs.editCs();
 					std::cout << "The compressor station was successfully edited!\n\n";
 				}
 				else {
 					std::cout << "ERROR. Compressor station does not exist\n\n";
 				}
 				break;
-			case 6:
-				savePipe(firstPipe, pipeExist);
+			case 6: {
+				std::ofstream ifile;
+				ifile.open("data.txt");
+				pipe.savePipe(ifile, pipeExist);
 				if (pipeExist)
 					std::cout << "The pipe was successfully saved!\n\n";
 				else
 					std::cout << "The pipe does not exist\n\n";
 
-				saveCs(firstCs, csExist);
+				cs.saveCs(ifile, csExist);
 				if (csExist) {
 					std::cout << "The compressor station was successfully saved!\n\n";
 				}
 				else
 					std::cout << "The compressor station does not exist\n\n";
-
+				ifile.close();
 				break;
-			case 7:
-				std::ifstream file;
-				file.open("data.txt");
-				pipeExist = loadPipe(firstPipe, file);
+			}
+			case 7: {
+				std::ifstream ofile;
+				ofile.open("data.txt");
+				pipeExist = pipe.loadPipe(ofile);
 				if (pipeExist)
 					std::cout << "The pipe was successfully loaded!\n\n";
 				else
 					std::cout << "Pipe does not exist\n\n";
 
-				csExist = loadCs(firstCs, file);
+				csExist = cs.loadCs(ofile);
 				if (csExist) {
 					std::cout << "The compressor station was successfully loaded!\n\n";
 				}
 				else
 					std::cout << "The compressor station does not exist\n\n";
+				ofile.close();
 				break;
+			}
 			}
 		}
 		else {
