@@ -1,24 +1,10 @@
-#include "headers/classes.h"
-
-#ifndef IOSTREAM_H
-#define IOSTREAM_H
-#include <iostream>
-#endif
-
-#ifndef STRING_H
-#define STRING_H
-#include <string>
-#endif
-
-#ifndef FSTREAM_H
-#define FSTREAM_H
-#include <fstream>
-#endif
-
-#ifndef CHECKCINERROR_H
-#define CHECKCINERROR_H
+#include "headers/pipeClass.h"
+#include "headers/compressorStationClass.h"
 #include "headers/checkCinError.h"
-#endif
+
+#include <iostream>
+#include <string>
+#include <fstream>
 
 Pipe::Pipe() {
 	isRepairing = false;
