@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,11 +128,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="classes.cpp" />
+    <ClCompile Include="auxiliaryFuncs.cpp" />
+    <ClCompile Include="compressorStationClass.cpp" />
     <ClCompile Include="Khanewskiy.cpp" />
+    <ClCompile Include="pipeClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="checkCinError.h" />
+    <ClInclude Include="headers\auxiliaryFuncs.h" />
+    <ClInclude Include="headers\batchProcessing.h" />
     <ClInclude Include="headers\compressorStationClass.h" />
     <ClInclude Include="headers\pipeClass.h" />
   </ItemGroup>

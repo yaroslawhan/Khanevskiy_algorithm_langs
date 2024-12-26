@@ -15,9 +15,12 @@ private:
 public:
 	void addCs();
 	void editCs();
-	bool saveCs(std::ofstream& out, bool csExist);
-	bool loadCs(std::ifstream& in);
-	void showCss();
+	void saveCs(std::ofstream& out);
+	void loadCs(std::ifstream& in);
+	void showCs();
+
+	std::string get_name();
+	float get_WorkshopsPercentage();
 };
 
 #endif  CS_H
